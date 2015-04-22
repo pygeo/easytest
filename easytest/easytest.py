@@ -21,7 +21,7 @@ class EasyTest(object):
         self.output_directory = output_directory
 
         assert self.refdirectory is not None, 'Reference directory needs to be given!'
-        assert os.path.exists(self.refdirectory)
+        #assert os.path.exists(self.refdirectory), 'Reference directory not existing: ' + self.refdirectory
         if self.refdirectory[-1] != os.sep:
             self.refdirectory += os.sep
 
@@ -85,18 +85,24 @@ class EasyTest(object):
     def _get_graphic_list(self, files):
         assert False
 
-    def _get_cmd_list(self):
+    def _xxxget_cmd_list(self):
         """ get command list """
         r = []
         r.append(self.exe)
 
         for a in self.args:
-            print a
             r.append(a)
-
         return r
 
-    def _execute(self, change_dir=True):
+    def _get_cmd_list(self):
+        """ get command list """
+        r = ''
+        r += self.exe
+        for a in self.args:
+            r += ' ' + a
+        return r
+
+    def _execute(self, wdir='.'):
         """
         run the actual program
 
@@ -105,18 +111,20 @@ class EasyTest(object):
 
         Parameters
         ----------
-        change_dir : bool
-            change to directory of executable before executing the shell
+        wdir : str
+            working directory
         """
-        if change_dir:
+        if wdir !='.':
             curdir = os.path.realpath(os.curdir)
-            if len(os.path.dirname(self.exe))>0:
-                os.chdir(os.path.dirname(self.exe))
+            os.chdir(wdir)
 
         # execute command line
-        subprocess.call(self._get_cmd_list(), shell=True)
+        cmd = self._get_cmd_list()
+        print 'Command line: ', cmd
+        #subprocess.call(cmd, shell=True)  # todo use subprocess
+        os.system(cmd)
 
-        if change_dir:
+        if wdir !='.':
             os.chdir(curdir)
 
     def _test_files(self, reffiles):

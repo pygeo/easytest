@@ -23,14 +23,14 @@ class TestData(unittest.TestCase):
         output_directory = tempfile.mkdtemp() + os.sep
         os.system('cp ' + self.refdir + '* ' +  output_directory)
         s = 'echo "Hello world"'
-        l = ['a', 1, 'b']
+        l = ['a', 'xx', 'b']
         self.T = EasyTest(s, l, refdirectory=self.refdir, output_directory = output_directory)
 
     def test_init(self):
         T = self.T
         s = 'echo "Hello world"'
         self.assertEqual(T.exe, s)
-        l = ['a', 1, 'b']
+        l = ['a', 'xx', 'b']
         for i in xrange(len(l)):
             self.assertEqual(l[i],T.args[i])
         self.assertEqual(T.refdirectory, self.refdir)
@@ -58,8 +58,7 @@ class TestData(unittest.TestCase):
         self.assertTrue(T._test_files(T._get_reference_file_list('all')))
         self.assertFalse(T._test_files(['nope.z']))
 
-    def test_test_execute(self):
-
+    def test_execute(self):
         T = self.T
         T.run(files='all')
 

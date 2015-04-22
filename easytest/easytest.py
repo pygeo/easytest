@@ -2,12 +2,13 @@
 import os
 import glob
 import hashlib
+import subprocess
 
 
 class EasyTest(object):
     def __init__(self, exe, args=None, refdirectory=None, output_directory=None):
         """
-        Paramters
+        Parameters
         ---------
         cmd : str
             command that will be executed at shell
@@ -52,15 +53,17 @@ class EasyTest(object):
         if checksum_files is not None:
             chk_test = self._test_checksum(self._get_reference_file_list(checksum_files))
 
-        if file_test:
-            print 'File     ... SUCESSFULL'
-        else:
-            print 'File     ... FAILED'
+        if files is not None:
+            if file_test:
+                print 'File     ... SUCESSFULL'
+            else:
+                print 'File     ... FAILED'
 
-        if chk_test:
-            print 'Checksum ... SUCESSFULL'
-        else:
-            print 'Checksum ... FAILED'
+        if checksum_files is not None:
+            if chk_test:
+                print 'Checksum ... SUCESSFULL'
+            else:
+                print 'Checksum ... FAILED'
 
     def _get_reference_file_list(self, files):
         if type(files) is list:
@@ -86,12 +89,35 @@ class EasyTest(object):
         """ get command list """
         r = []
         r.append(self.exe)
+
         for a in self.args:
+            print a
             r.append(a)
 
-    def _execute():
-        """ run the actual program """
+        return r
+
+    def _execute(self, change_dir=True):
+        """
+        run the actual program
+
+        generates a command line string for execution in a shell.
+        and then executes the command
+
+        Parameters
+        ----------
+        change_dir : bool
+            change to directory of executable before executing the shell
+        """
+        if change_dir:
+            curdir = os.path.realpath(os.curdir)
+            if len(os.path.dirname(self.exe))>0:
+                os.chdir(os.path.dirname(self.exe))
+
+        # execute command line
         subprocess.call(self._get_cmd_list(), shell=True)
+
+        if change_dir:
+            os.chdir(curdir)
 
     def _test_files(self, reffiles):
         """

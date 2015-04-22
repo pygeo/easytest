@@ -5,7 +5,7 @@ import hashlib
 
 
 class EasyTest(object):
-    def __init__(self, exe, args=[], refdirectory=None, output_directory=None):
+    def __init__(self, exe, args=None, refdirectory=None, output_directory=None):
         """
         Paramters
         ---------
@@ -42,14 +42,25 @@ class EasyTest(object):
             reference data directory
         """
 
-        #self._execute()
+        if self.exe is not None:
+            self._execute()
         if files is not None:
-            self._test_files(files)
+            file_test = self._test_files(self._get_reference_file_list(files))
         if graphics is not None:
             assert False
             #self._test_graphics(self._get_graphic_list(graphics))
         if checksum_files is not None:
-            self._test_checksum(checksum_files)
+            chk_test = self._test_checksum(self._get_reference_file_list(checksum_files))
+
+        if file_test:
+            print 'File     ... SUCESSFULL'
+        else:
+            print 'File     ... FAILED'
+
+        if chk_test:
+            print 'Checksum ... SUCESSFULL'
+        else:
+            print 'Checksum ... FAILED'
 
     def _get_reference_file_list(self, files):
         if type(files) is list:

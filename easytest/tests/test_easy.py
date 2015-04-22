@@ -20,53 +20,51 @@ class TestData(unittest.TestCase):
             o.write('test')
             o.close()
 
-    def test_init(self):
+        output_directory = tempfile.mkdtemp() + os.sep
+        os.system('cp ' + self.refdir + '* ' +  output_directory)
         s = 'echo "Hello world"'
         l = ['a', 1, 'b']
-        T = EasyTest(s, l, refdirectory=self.refdir)
+        self.T = EasyTest(s, l, refdirectory=self.refdir, output_directory = output_directory)
+
+    def test_init(self):
+        T = self.T
+        s = 'echo "Hello world"'
         self.assertEqual(T.exe, s)
+        l = ['a', 1, 'b']
         for i in xrange(len(l)):
             self.assertEqual(l[i],T.args[i])
         self.assertEqual(T.refdirectory, self.refdir)
 
-    def test_get_file_list(self):
-        s = 'echo "Hello world"'
-        l = ['a', 1, 'b']
-        T = EasyTest(s, l, refdirectory=self.refdir)
+    def test_get_reference_file_list(self):
+        T = self.T
 
-        files = T._get_file_list('all')
+        files = T._get_reference_file_list('all')
         for f in files:
             self.assertTrue(os.path.basename(f) in self.files)
             self.assertTrue(self.refdir in f)
         self.assertEqual(len(files), len(self.files))
 
         ref = ['xx.png', 'yy.txt']
-        files = T._get_file_list(ref)
+        files = T._get_reference_file_list(ref)
         for f in files:
             self.assertTrue(os.path.basename(f) in ref)
             self.assertTrue(self.refdir in f)
         self.assertEqual(len(files), len(ref))
 
     def test_test_files(self):
-        s = 'echo "Hello world"'
-        l = ['a', 1, 'b']
-        T = EasyTest(s, l, refdirectory=self.refdir)
 
-        self.assertTrue(T._test_files(T._get_file_list('all')))
+        T = self.T
+
+        self.assertTrue(T._test_files(T._get_reference_file_list('all')))
         self.assertFalse(T._test_files(['nope.z']))
 
     def test_test_execute(self):
-        s = 'echo "Hello world"'
-        l = ['a', 1, 'b']
-        T = EasyTest(s, l, refdirectory=self.refdir)
 
+        T = self.T
         T.run(files='all')
 
     def test_test_checksum(self):
-        s = 'echo "Hello world"'
-        l = ['a', 1, 'b']
-        T = EasyTest(s, l, refdirectory=self.refdir)
-
+        T = self.T
         tdir = tempfile.mkdtemp() + os.sep
         tfile = tdir + 'a.txt'
         o=open(tfile,'w')

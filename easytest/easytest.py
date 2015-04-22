@@ -5,7 +5,7 @@ import hashlib
 
 
 class EasyTest(object):
-    def __init__(self, exe, args=[], refdirectory=None):
+    def __init__(self, exe, args=[], refdirectory=None, output_directory=None):
         """
         Paramters
         ---------
@@ -17,20 +17,26 @@ class EasyTest(object):
         self.exe = exe
         self.args = args
         self.refdirectory = refdirectory
+        self.output_directory = output_directory
 
         assert self.refdirectory is not None, 'Reference directory needs to be given!'
         assert os.path.exists(self.refdirectory)
         if self.refdirectory[-1] != os.sep:
             self.refdirectory += os.sep
 
-    def run(self, files=[], graphics=[]):
+        assert self.output_directory is not None, 'Output directory needs to be given!'
+        assert os.path.exists(self.output_directory)
+        if self.output_directory[-1] != os.sep:
+            self.output_directory += os.sep
+
+    def run(self, files=None, graphics=None, checksum_files=None):
         """
         Execute program and run tests
 
         Parameters
         ----------
         files : list/str
-            list of files to be checked.
+            list of filenames to be checked.
             If 'all' is given instead, then the program automatically
             tries to check for all files which are found in the
             reference data directory
@@ -38,16 +44,18 @@ class EasyTest(object):
 
         #self._execute()
         if files is not None:
-            self._test_files(self._get_file_list(files))
+            self._test_files(files)
         if graphics is not None:
-            pass
+            assert False
             #self._test_graphics(self._get_graphic_list(graphics))
+        if checksum_files is not None:
+            self._test_checksum(checksum_files)
 
-    def _get_file_list(self, files):
+    def _get_reference_file_list(self, files):
         if type(files) is list:
             r = []
             for f in files:
-                r.append(self.refdirectory + f)
+                r.append(self.refdirectory + os.path.basename(f))
             return r
         else:
             if files == 'all':
@@ -85,7 +93,7 @@ class EasyTest(object):
         """
         res = True
         for f in reffiles:
-            if os.path.exists(f):
+            if os.path.exists(self.output_directory + os.path.basename(f)):
                 pass
             else:
                 res = False

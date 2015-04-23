@@ -21,7 +21,6 @@ class EasyTest(object):
         self.output_directory = output_directory
 
         assert self.refdirectory is not None, 'Reference directory needs to be given!'
-        #assert os.path.exists(self.refdirectory), 'Reference directory not existing: ' + self.refdirectory
         if self.refdirectory[-1] != os.sep:
             self.refdirectory += os.sep
 
@@ -114,7 +113,7 @@ class EasyTest(object):
         wdir : str
             working directory
         """
-        if wdir !='.':
+        if wdir != '.':
             curdir = os.path.realpath(os.curdir)
             os.chdir(wdir)
 

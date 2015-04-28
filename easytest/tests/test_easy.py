@@ -14,14 +14,18 @@ class TestData(unittest.TestCase):
 
     def setUp(self):
         self.refdir = tempfile.mkdtemp() + os.sep
-        self.files = ['a.txt', 'b.dat', 'c.xls', 'd.doc']
+        os.makedirs(self.refdir + 'A' + os.sep)
+        os.makedirs(self.refdir + 'B' + os.sep)
+        self.files = ['a.txt', 'b.dat', 'c.xls', 'd.doc',  'A' + os.sep + 'Aout1.dat', 'A' + os.sep + 'Aout2.dat',  'B' + os.sep + 'Bout.dat']
         for f in self.files:
+            #print f
+            #print self.refdir + f
             o = open(self.refdir + f, 'w')
             o.write('test')
             o.close()
 
         output_directory = tempfile.mkdtemp() + os.sep
-        os.system('cp ' + self.refdir + '* ' +  output_directory)
+        os.system('cp -r ' + self.refdir + '* ' +  output_directory)
         s = 'echo "Hello world"'
         l = ['a', 'xx', 'b']
         self.T = EasyTest(s, l, refdirectory=self.refdir, output_directory = output_directory)
@@ -39,8 +43,9 @@ class TestData(unittest.TestCase):
         T = self.T
 
         files = T._get_reference_file_list('all')
+        print self.files
         for f in files:
-            self.assertTrue(os.path.basename(f) in self.files)
+            self.assertTrue(f.replace(self.refdir,'') in self.files)
             self.assertTrue(self.refdir in f)
         self.assertEqual(len(files), len(self.files))
 
@@ -60,7 +65,7 @@ class TestData(unittest.TestCase):
 
     def test_execute(self):
         T = self.T
-        T.run(files='all')
+        T.run_tests(files='all')
 
     def test_test_checksum(self):
         T = self.T

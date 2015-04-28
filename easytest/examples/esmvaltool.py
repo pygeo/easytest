@@ -11,7 +11,7 @@ import shutil
 from easytest import EasyTest
 
 # ESMValTool installation path
-esmval_dir = '/home/m300028/shared/dev/svn/ESMVAL/svn/trunk2'
+esmval_dir = '/home/m300028/shared/dev/svn/ESMVAL/svn/trunk2'  # todo
 
 class ESMValToolTest(EasyTest):
     """
@@ -31,7 +31,7 @@ class ESMValToolTest(EasyTest):
 
         #output_directory = get_output_dir_from_namelist()
 
-        output_directory = '.'   # TODO
+        output_directory = kwargs.pop('output_directory', './work/plots')  # default output directory
 
         super(ESMValToolTest,self).__init__(exe, args=[self.nml], output_directory=output_directory, **kwargs)
 
@@ -70,11 +70,21 @@ class DummyTest(ESMValToolTest):
 class PerfMetricCMIP5Test(ESMValToolTest):
     def __init__(self):
         # specify namelist name and reference data directory
-        nml = 'nml/test_suites/dlr/namelist_perfmetrics_CMIP5.xml'
-        refdir = '.' + os.sep + 'refdata' + os.sep + 'dummy' + os.sep  # todo
+        nml = 'nml/test_suites/dlr/namelist_perfmetrics_CMIP5_test.xml'
+        #refdir = '.' + os.sep + 'refdata' + os.sep + 'dummy' + os.sep  # todo
+        refdir = '/home/m300028/shared/dev/svn/ESMVAL/svn/trunk2/testdata/perfmetrics_CMIP5/output/plots/'  # todo
+
         super(PerfMetricCMIP5Test,self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
 
 
+#todo recursive file check !!!
+#with sundirectories !
+
+
+
+
+# small datasets!
+# all test namelists should haves same output directory ???? Otherwise as part of child class!
 
 
 
@@ -89,7 +99,11 @@ class PerfMetricCMIP5Test(ESMValToolTest):
 #~ ST.run_test()
 
 PT = PerfMetricCMIP5Test()
-PT.run_nml()
+#PT.run_nml()
+PT.run_tests(execute=False, graphics=None, checksum_files=None,files='all')
+
+
+
 #PT.run(files=None, graphics=None, checksum_files=None)
 
 

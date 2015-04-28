@@ -25,11 +25,13 @@ class EasyTest(object):
             self.refdirectory += os.sep
 
         assert self.output_directory is not None, 'Output directory needs to be given!'
-        assert os.path.exists(self.output_directory)
+        if not os.path.exists(self.output_directory):
+            os.makedirs(self.output_directory)
+
         if self.output_directory[-1] != os.sep:
             self.output_directory += os.sep
 
-    def run(self, files=None, graphics=None, checksum_files=None):
+    def run_tests(self, files=None, graphics=None, checksum_files=None, execute=True):
         """
         Execute program and run tests
 
@@ -42,8 +44,9 @@ class EasyTest(object):
             reference data directory
         """
 
-        if self.exe is not None:
-            self._execute()
+        if execute:
+            if self.exe is not None:
+                self._execute()
         if files is not None:
             file_test = self._test_files(self._get_reference_file_list(files))
         if graphics is not None:
@@ -74,18 +77,29 @@ class EasyTest(object):
             if files == 'all':
                 files = self._get_files_from_refdir()
             else:
-                assert False
+                assert False, 'Argument FILES has not been correctly specified!'
         return files
 
     def _get_files_from_refdir(self):
         """ get list of files from reference directory """
-        return glob.glob(self.refdirectory + '*')
+        #return glob.glob(self.refdirectory + '*')
+        # http://stackoverflow.com/questions/2186525/use-a-glob-to-find-files-recursively-in-python
+        import fnmatch
+        matches = []
+        for root, dirnames, filenames in os.walk(self.refdirectory):
+          for filename in fnmatch.filter(filenames, '*'):
+            matches.append(os.path.join(root, filename))
+        return matches
+
+
 
     def _get_graphic_list(self, files):
         assert False
 
     def _xxxget_cmd_list(self):
-        """ get command list """
+        """
+        get command list
+        """
         r = []
         r.append(self.exe)
 
@@ -94,7 +108,9 @@ class EasyTest(object):
         return r
 
     def _get_cmd_list(self):
-        """ get command list """
+        """
+        get command list
+        """
         r = ''
         r += self.exe
         for a in self.args:
@@ -137,11 +153,13 @@ class EasyTest(object):
         """
         res = True
         for f in reffiles:
-            if os.path.exists(self.output_directory + os.path.basename(f)):
+            # file to search for
+            sf = f.replace(self.refdirectory,self.output_directory) #+ os.path.basename(f)
+            if os.path.exists(sf):
                 pass
             else:
                 res = False
-                print 'Failure: ', f
+                print 'Failure: ', sf
         return res
 
     def _test_graphics(self, files):

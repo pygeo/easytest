@@ -31,7 +31,7 @@ class ESMValToolTest(EasyTest):
 
         #output_directory = get_output_dir_from_namelist()
 
-        output_directory = kwargs.pop('output_directory', './work/plots')  # default output directory
+        output_directory = kwargs.pop('output_directory', self.esmval_dir + os.sep + 'work' + os.sep + 'plots')  # default output directory
 
         super(ESMValToolTest,self).__init__(exe, args=[self.nml], output_directory=output_directory, **kwargs)
 

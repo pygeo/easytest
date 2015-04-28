@@ -91,8 +91,6 @@ class EasyTest(object):
             matches.append(os.path.join(root, filename))
         return matches
 
-
-
     def _get_graphic_list(self, files):
         assert False
 

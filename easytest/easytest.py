@@ -50,11 +50,10 @@ class EasyTest(object):
         if files is not None:
             file_test = self._test_files(self._get_reference_file_list(files))
         if graphics is not None:
-            assert False
+            assert False, 'Graphic testing currently not implemented yet!'
             #self._test_graphics(self._get_graphic_list(graphics))
         if checksum_files is not None:
             chk_test = self._test_checksum(self._get_reference_file_list(checksum_files))
-
         if files is not None:
             if file_test:
                 print 'File     ... SUCESSFULL'

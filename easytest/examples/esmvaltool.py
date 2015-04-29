@@ -3,7 +3,7 @@ sample script for ESMValTool testing
 """
 
 import sys
-sys.path.insert(0,'/home/m300028/shared/dev/svn/easytest/')   # TODO
+sys.path.insert(0,'/home/m300028/shared/dev/svn/easytest/')   # TODO (not needed when installed correctly as python package)
 
 import os
 import shutil
@@ -11,7 +11,7 @@ import shutil
 from easytest import EasyTest
 
 # ESMValTool installation path
-esmval_dir = '/home/m300028/shared/dev/svn/ESMVAL/svn/trunk2'  # todo
+esmval_dir = '/home/m300028/shared/dev/svn/ESMVAL/svn/trunk2'  # todo: would be best if during ESMValTool installation an environment variable would be set.
 
 class ESMValToolTest(EasyTest):
     """
@@ -19,19 +19,23 @@ class ESMValToolTest(EasyTest):
     """
 
     def __init__(self, **kwargs):
+        """
+        output_directory : str
+            a default output directory is set as ESMVALROOT/work/plots
+            but user can specify custom output directory
+        """
         self.nml = kwargs.pop('nml', None)
         assert self.nml is not None, 'Namelist needs to be provided!'
 
-        #exe = kwargs.pop('exe', None)
-        exe = 'python main.py'
+        exe = 'python main.py'  # the command to call ESMValTool
         assert exe is not None, 'Executable needs to be given!'
 
         self.esmval_dir = kwargs.pop('esmval_dir', None)
         assert self.esmval_dir is not None, 'esmval_dir directory needs to be given'
 
-        #output_directory = get_output_dir_from_namelist()
-
         output_directory = kwargs.pop('output_directory', self.esmval_dir + os.sep + 'work' + os.sep + 'plots')  # default output directory
+
+        self.refdir_root = self.esmval_dir + 'testdata' + os.sep
 
         super(ESMValToolTest,self).__init__(exe, args=[self.nml], output_directory=output_directory, **kwargs)
 
@@ -42,9 +46,6 @@ class ESMValToolTest(EasyTest):
         """
         self._execute(wdir=self.esmval_dir)
 
-        # copy results from output directory to reference directory
-        #self._copy_output()
-
     def run_nml(self):
         self._execute(wdir=self.esmval_dir)
 
@@ -53,12 +54,6 @@ class ESMValToolTest(EasyTest):
         shutil.copytree(self.output_directory, self.refdirectory)
 
 
-class SeaIceTest(ESMValToolTest):
-    def __init__(self):
-        # specify namelist name and reference data directory
-        nml = 'nml/seaice.xml'
-        refdir = '.' + os.sep + 'refdata' + os.sep + 'seaice' + os.sep
-        super(SeaIceTest,self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
 
 class DummyTest(ESMValToolTest):
     def __init__(self):
@@ -69,42 +64,22 @@ class DummyTest(ESMValToolTest):
 
 class PerfMetricCMIP5Test(ESMValToolTest):
     def __init__(self):
-        # specify namelist name and reference data directory
-        nml = 'nml/test_suites/dlr/namelist_perfmetrics_CMIP5_test.xml'
-        #refdir = '.' + os.sep + 'refdata' + os.sep + 'dummy' + os.sep  # todo
-        refdir = '/home/m300028/shared/dev/svn/ESMVAL/svn/trunk2/testdata/perfmetrics_CMIP5/output/plots/'  # todo
+
+        # 1) define here the name of the namelist
+        nml_name = 'namelist_perfmetrics_CMIP5_test.xml'
+
+        # 2) specify here the full path of the namelist (relative to ESMValTool root)
+        nml = 'nml/test_suites/dlr/' + nml_name
+
+        # 3) define here the location of the reference directory
+        #    note that it is expeced that the directory has the same name as the namelist
+        refdir = esmval_dir + os.sep + os.path.splitext(nml_name)[0] + '/output/plots/'
 
         super(PerfMetricCMIP5Test,self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
 
 
-#todo recursive file check !!!
-#with sundirectories !
-
-
-
-
-# small datasets!
-# all test namelists should haves same output directory ???? Otherwise as part of child class!
-
-
-
-
-
-##### test
-
-#~ ST = DummyTest()
-#~ ST.generate_reference_data()
-#~
-#~ ST = SeaIceTest()
-#~ ST.run_test()
-
 PT = PerfMetricCMIP5Test()
-#PT.run_nml()
-PT.run_tests(execute=False, graphics=None, checksum_files=None,files='all')
-
-
-
-#PT.run(files=None, graphics=None, checksum_files=None)
-
+PT.run_nml()
+PT.run_tests(execute=False, graphics=None, checksum_files='all',files='all')
 
 

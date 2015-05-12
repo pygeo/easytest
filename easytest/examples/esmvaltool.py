@@ -2,6 +2,7 @@
 sample script for ESMValTool testing
 """
 
+import pdb
 import sys
 sys.path.insert(0,'/home/m300028/shared/dev/svn/easytest/')   # TODO (not needed when installed correctly as python package)
 

@@ -9,6 +9,7 @@ sys.path.insert(0,'/home/m300028/shared/dev/svn/easytest/')   # TODO (not needed
 import os
 import shutil
 
+from xml.dom import minidom
 from easytest import EasyTest
 
 # ESMValTool installation path
@@ -34,7 +35,9 @@ class ESMValToolTest(EasyTest):
         self.esmval_dir = kwargs.pop('esmval_dir', None)
         assert self.esmval_dir is not None, 'esmval_dir directory needs to be given'
 
-        output_directory = kwargs.pop('output_directory', self.esmval_dir + os.sep + 'work' + os.sep + 'plots')  # default output directory
+        xmldoc = minidom.parse(os.path.join(self.esmval_dir, self.nml))
+        nml_plot_dir = xmldoc.getElementsByTagName('plot_dir')[0].childNodes[0].nodeValue.strip()
+        output_directory = kwargs.pop('output_directory', os.path.join(self.esmval_dir, nml_plot_dir))  # output directory as defined in nml
 
         self.refdir_root = self.esmval_dir + 'testdata' + os.sep
 

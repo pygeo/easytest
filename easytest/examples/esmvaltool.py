@@ -49,6 +49,8 @@ class ESMValToolTest(EasyTest):
         to the output directory
         """
         self._execute(wdir=self.esmval_dir)
+        if not os.path.exists(self.refdirectory):
+            self._copy_output()
 
     def run_nml(self):
         self._execute(wdir=self.esmval_dir)

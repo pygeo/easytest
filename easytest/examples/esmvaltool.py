@@ -68,6 +68,13 @@ class DummyTest(ESMValToolTest):
         refdir = '.' + os.sep + 'refdata' + os.sep + 'dummy' + os.sep
         super(DummyTest,self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
 
+class OverviewTest(ESMValToolTest):
+    def __init__(self):
+        # specify namelist name and reference data directory
+        nml = 'nml/namelist_overview.xml'
+        refdir = os.path.join('refdata', 'overiew')
+        super(OverviewTest, self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
+
 class PerfMetricCMIP5Test(ESMValToolTest):
     def __init__(self):
 

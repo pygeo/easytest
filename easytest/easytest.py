@@ -176,18 +176,34 @@ class EasyTest(object):
 
         res = True
         for f in reffiles:
-            cref = hashlib.md5(f).hexdigest()  # hash key of reference file
-            for k in files:
-                if os.path.basename(f) == os.path.basename(k):
-                    kref = hashlib.md5(k).hexdigest()
+            cref = self.hashfile(open(f, 'rb'), hashlib.sha256())
 
-                    if cref != kref:
-                        print ''
-                        print k
-                        print f
+            sf = f.replace(self.refdirectory, self.output_directory)
+            sfref = self.hashfile(open(sf, 'rb'), hashlib.sha256())
 
-                        print 'Different md5 key: ', os.path.basename(f), cref, kref
-                        res = False
+            if cref != sfref:
+                print ''
+                print sf
+                print f
+
+                print 'Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex')
+                res = False
         return res
 
+    def hashfile(self, afile, hasher, blocksize=65536):
+        """
+        perform memory effiecient sha256 checksum on
+        provided filename.
+        See https://stackoverflow.com/questions/3431825/generating-a-md5-checksum-of-a-file#3431835
 
+        Parameters
+        ----------
+        afile : string
+        hasher: hash function
+        blocksize: file read chunk size
+        """
+        buf = afile.read(blocksize)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(blocksize)
+        return hasher.digest()

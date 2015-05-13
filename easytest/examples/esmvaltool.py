@@ -75,6 +75,13 @@ class OverviewTest(ESMValToolTest):
         refdir = os.path.join('refdata', 'overiew')
         super(OverviewTest, self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
 
+class EvapotranspirationTest(ESMValToolTest):
+    def __init__(self):
+        # specify namelist name and reference data directory
+        nml = 'nml/namelist_Evapotranspiration.xml'
+        refdir = os.path.join('refdata', 'evapotranspiration')
+        super(EvapotranspirationTest, self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
+
 class PerfMetricCMIP5Test(ESMValToolTest):
     def __init__(self):
 

@@ -146,12 +146,12 @@ class EasyTest(object):
 
         Parameters
         ----------
-        files : list
-            list of files to test
+        reffiles : list
+            list of reference files to agains
         """
         res = True
         for f in reffiles:
-            # file to search for
+            # get list of expected plot files
             sf = f.replace(self.refdirectory,self.output_directory) #+ os.path.basename(f)
             if os.path.exists(sf):
                 pass
@@ -160,24 +160,19 @@ class EasyTest(object):
                 print 'Failure: ', sf
         return res
 
-    def _test_graphics(self, files):
+    def _test_graphics(self, reffiles):
         assert False
 
-    def _test_checksum(self, files):
+    def _test_checksum(self, reffiles):
         """
-        perform a checksum test for all files given
-        it reads a list of filenames to be tested and
-        searches for the corresponding files in the reference
-        data directory
+        perform a checksum test for all reffiles given
+        against the files in the current plot dir
 
         Parameters
         ----------
-        files : list
+        reffiles : list
             list of files to be processed
         """
-
-        # get list of reference files
-        reffiles = self._get_files_from_refdir()
 
         res = True
         for f in reffiles:

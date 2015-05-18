@@ -2,6 +2,7 @@
 import os
 import glob
 import hashlib
+import pdb
 import subprocess
 
 
@@ -145,12 +146,12 @@ class EasyTest(object):
 
         Parameters
         ----------
-        files : list
-            list of files to test
+        reffiles : list
+            list of reference files to agains
         """
         res = True
         for f in reffiles:
-            # file to search for
+            # get list of expected plot files
             sf = f.replace(self.refdirectory,self.output_directory) #+ os.path.basename(f)
             if os.path.exists(sf):
                 pass
@@ -159,39 +160,50 @@ class EasyTest(object):
                 print 'Failure: ', sf
         return res
 
-    def _test_graphics(self, files):
+    def _test_graphics(self, reffiles):
         assert False
 
-    def _test_checksum(self, files):
+    def _test_checksum(self, reffiles):
         """
-        perform a checksum test for all files given
-        it reads a list of filenames to be tested and
-        searches for the corresponding files in the reference
-        data directory
+        perform a checksum test for all reffiles given
+        against the files in the current plot dir
 
         Parameters
         ----------
-        files : list
+        reffiles : list
             list of files to be processed
         """
 
-        # get list of reference files
-        reffiles = self._get_files_from_refdir()
-
         res = True
         for f in reffiles:
-            cref = hashlib.md5(f).hexdigest()  # hash key of reference file
-            for k in files:
-                if os.path.basename(f) == os.path.basename(k):
-                    kref = hashlib.md5(k).hexdigest()
+            cref = self.hashfile(open(f, 'rb'), hashlib.sha256())
 
-                    if cref != kref:
-                        print ''
-                        print k
-                        print f
+            sf = f.replace(self.refdirectory, self.output_directory)
+            sfref = self.hashfile(open(sf, 'rb'), hashlib.sha256())
 
-                        print 'Different md5 key: ', os.path.basename(f), cref, kref
-                        res = False
+            if cref != sfref:
+                print ''
+                print sf
+                print f
+
+                print 'Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex')
+                res = False
         return res
 
+    def hashfile(self, afile, hasher, blocksize=65536):
+        """
+        perform memory effiecient sha256 checksum on
+        provided filename.
+        See https://stackoverflow.com/questions/3431825/generating-a-md5-checksum-of-a-file#3431835
 
+        Parameters
+        ----------
+        afile : string
+        hasher: hash function
+        blocksize: file read chunk size
+        """
+        buf = afile.read(blocksize)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(blocksize)
+        return hasher.digest()

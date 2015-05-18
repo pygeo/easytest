@@ -2,12 +2,14 @@
 sample script for ESMValTool testing
 """
 
+import pdb
 import sys
 sys.path.insert(0,'/home/m300028/shared/dev/svn/easytest/')   # TODO (not needed when installed correctly as python package)
 
 import os
 import shutil
 
+from xml.dom import minidom
 from easytest import EasyTest
 
 # ESMValTool installation path
@@ -33,7 +35,9 @@ class ESMValToolTest(EasyTest):
         self.esmval_dir = kwargs.pop('esmval_dir', None)
         assert self.esmval_dir is not None, 'esmval_dir directory needs to be given'
 
-        output_directory = kwargs.pop('output_directory', self.esmval_dir + os.sep + 'work' + os.sep + 'plots')  # default output directory
+        xmldoc = minidom.parse(os.path.join(self.esmval_dir, self.nml))
+        nml_plot_dir = xmldoc.getElementsByTagName('plot_dir')[0].childNodes[0].nodeValue.strip()
+        output_directory = kwargs.pop('output_directory', os.path.join(self.esmval_dir, nml_plot_dir))  # output directory as defined in nml
 
         self.refdir_root = self.esmval_dir + 'testdata' + os.sep
 
@@ -45,6 +49,8 @@ class ESMValToolTest(EasyTest):
         to the output directory
         """
         self._execute(wdir=self.esmval_dir)
+        if not os.path.exists(self.refdirectory):
+            self._copy_output()
 
     def run_nml(self):
         self._execute(wdir=self.esmval_dir)
@@ -61,6 +67,20 @@ class DummyTest(ESMValToolTest):
         nml = 'nml/namelist_dummy_python.xml'
         refdir = '.' + os.sep + 'refdata' + os.sep + 'dummy' + os.sep
         super(DummyTest,self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
+
+class OverviewTest(ESMValToolTest):
+    def __init__(self):
+        # specify namelist name and reference data directory
+        nml = 'nml/namelist_overview.xml'
+        refdir = os.path.join('refdata', 'overiew')
+        super(OverviewTest, self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
+
+class EvapotranspirationTest(ESMValToolTest):
+    def __init__(self):
+        # specify namelist name and reference data directory
+        nml = 'nml/namelist_Evapotranspiration.xml'
+        refdir = os.path.join('refdata', 'evapotranspiration')
+        super(EvapotranspirationTest, self).__init__(nml=nml, refdirectory=refdir, esmval_dir=esmval_dir)
 
 class PerfMetricCMIP5Test(ESMValToolTest):
     def __init__(self):

@@ -2,7 +2,6 @@
 """
 """
 
-from unittest import TestCase
 import unittest
 
 from easytest import EasyTest

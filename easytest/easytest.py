@@ -181,6 +181,8 @@ class EasyTest(object):
             sf = f.replace(self.refdirectory, self.output_directory)
             sfref = self.hashfile(open(sf, 'rb'), hashlib.sha256())
 
+            print sf, f, self.refdirectory, self.output_directory
+
             if cref != sfref:
                 print ''
                 print sf
@@ -188,6 +190,9 @@ class EasyTest(object):
 
                 print 'Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex')
                 res = False
+
+        print 'REFFILES: ', reffiles
+        print 'Results: ', res
         return res
 
     def hashfile(self, afile, hasher, blocksize=65536):

@@ -12,7 +12,7 @@ clean :
 	rm -rf tmp
 	rm -rf doc
 	rm -rf dist
-	rm -rf pycmbs.egg-info
+	rm -rf easytest.egg-info
 
 dist : clean
 	python setup.py sdist

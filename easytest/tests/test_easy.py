@@ -69,6 +69,8 @@ class TestData(unittest.TestCase):
     def test_test_checksum(self):
         T = self.T
         tdir = tempfile.mkdtemp() + os.sep
+        T.refdirectory = tdir
+        #write some file with different content
         tfile = tdir + 'a.txt'
         o=open(tfile,'w')
         o.write('test1')

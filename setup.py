@@ -55,7 +55,7 @@ setup(name='easytest',
       maintainer='Alexander Loew',
       maintainer_email='alexander.loew@lmu.de',
 
-      license='All right reserved',
+      license='APACHE 2.0',
 
       long_description='xxxxxxxxxxxxxxxxxxxxxxxx',
 

@@ -10,6 +10,14 @@ branches:
 
 before_install:
 
+# general setup
+- sudo apt-get install python-pip
+
+# test installation from last pypi release
+pip install easytest
+
+
+
 script:
 - nosetests
 

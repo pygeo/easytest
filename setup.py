@@ -15,7 +15,6 @@ import glob
 # example of setup.py can be found here:
 # https://github.com/pypa/sampleproject/blob/master/setup.py
 
-
 # a small example how to build dependencies is given here:
 # http://stackoverflow.com/questions/11010151/distributing-a-shared-library-and-some-c-code-with-a-cython-extension-module
 
@@ -31,13 +30,12 @@ from Cython.Distutils import build_ext
                     #~ "matplotlib", 'shapely', 'cartopy', 'cython', 'scipy']
 
 def get_packages():
-    #find_packages(exclude=['contrib', 'docs', 'tests*']),
     return find_packages()
 
 
 setup(name='easytest',
 
-      version='v0.1',
+      version='0.1',
 
       description='easytest - a framework for simple automated testing',
 
@@ -57,7 +55,7 @@ setup(name='easytest',
 
       license='APACHE 2.0',
 
-      long_description='xxxxxxxxxxxxxxxxxxxxxxxx',
+      long_description='No long description so far',
 
       # List run-time dependencies here. These will be installed by pip when your
       # project is installed. For an analysis of "install_requires" vs pip's

@@ -1,51 +1,17 @@
 language: python
 python: 2.7
+
 virtualenv:
   system_site_packages: true
 
 branches:
     only:
         - master
+
 before_install:
-
-#- sudo apt-get update
-
-# general setup
-#- sudo apt-get install python-pip python-dev
-
-# latex environment
-#- sudo apt-get install texlive-latex-base texlive-latex-extra texlive-latex-recommended
-
-# basic python modules
-#- sudo apt-get install python-numpy
-#- sudo apt-get install python-scipy
-# todo clarify alternative installation for SCIPY to allow for most recent version ??
-#- pip install pyparsing
-#- pip install matplotlib
-#- sudo apt-get install python-mpltoolkits.basemap python-mpltoolkits.basemap-data
-
-
-
-
-
-
 
 script:
 - nosetests
-
-#~ deploy:
-  #~ provider: pypi
-  #~ user: easytest_developers
-  #~ password:
-    #~ secure: X5cSY/ZCdULBqtD8/fc+IvThpuYgaEEU28DM/84GyqQPrt0aURdckcyp16UwYoOm0C1EsnLJ91fAHxXpaQsbjdVCNRTX0btdq2pT8UwxQKGJJMYXENKsGZi035cPK1Y3he3db3kEKcZD/ys3uUcyp9zWdVUt/E8P9b8GqqOd/So=
-  #~ on:
-    #~ tags: true
-    #~ repo: pygeo/easytest
-#~
-#~ env:
-    #~ global:
-    #~ - secure: cN9qTk1NsSckHgksATMMdthrFPO9a/rl2F6MNPK3uvCfQui2sIottchC6MT7+2Z2bBaBQN7b3VJLOlSf8WNzNEvIXfQ3FP7hDHQ+w97qsGUAsAVSrF+JNvsC2vESj9A/CCkyr2rejtF9NWmk/Lgx/3YZDGsmeeMNJzCp5MKEY8k=
-
 
 
 

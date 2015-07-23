@@ -14,7 +14,7 @@ before_install:
 - sudo apt-get install python-pip
 
 # test installation from last pypi release
-pip install easytest
+- pip install easytest
 
 
 

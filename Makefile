@@ -17,10 +17,8 @@ clean :
 dist : clean
 	python setup.py sdist
 
-update_version:
-	python autoincrement_version.py
 
-upload_pip: update_version
+upload_pip: 
 	# ensure that pip version has always counterpart on github
 	git push origin master
 	# note that this requres .pypirc file beeing in home directory

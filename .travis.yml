@@ -15,6 +15,7 @@ before_install:
 
 # test installation from last pypi release
 - pip install easytest
+- pip uninstall easytest
 
 
 

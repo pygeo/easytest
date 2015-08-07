@@ -20,6 +20,7 @@ class EasyTest(object):
         self.args = args
         self.refdirectory = refdirectory
         self.output_directory = output_directory
+        self.sucess = True
 
         assert self.refdirectory is not None, 'Reference directory needs to be given!'
         if self.refdirectory[-1] != os.sep:
@@ -49,23 +50,29 @@ class EasyTest(object):
             if self.exe is not None:
                 self._execute()
         if files is not None:
-            file_test = self._test_files(self._get_reference_file_list(files))
+            files2test = self._get_reference_file_list(files)
+            assert len(files2test) > 0, 'No testfiles were found in the reference directory! ' + self.refdirectory
+            file_test = self._test_files(files2test)
         if graphics is not None:
             assert False, 'Graphic testing currently not implemented yet!'
             #self._test_graphics(self._get_graphic_list(graphics))
         if checksum_files is not None:
-            chk_test = self._test_checksum(self._get_reference_file_list(checksum_files))
+            files2testchk = self._get_reference_file_list(checksum_files)
+            assert len(files2testchk) > 0, 'No testfiles were found in the reference directory for checksum! ' + self.refdirectory
+            chk_test = self._test_checksum(files2testchk)
         if files is not None:
             if file_test:
                 print 'File     ... SUCESSFULL'
             else:
                 print 'File     ... FAILED'
+                self.sucess = False
 
         if checksum_files is not None:
             if chk_test:
                 print 'Checksum ... SUCESSFULL'
             else:
                 print 'Checksum ... FAILED'
+                self.sucess = False
 
     def _get_reference_file_list(self, files):
         if type(files) is list:
@@ -185,14 +192,11 @@ class EasyTest(object):
 
             if cref != sfref:
                 print ''
+                print 'Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex')
                 print sf
                 print f
-
-                print 'Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex')
                 res = False
 
-        print 'REFFILES: ', reffiles
-        print 'Results: ', res
         return res
 
     def hashfile(self, afile, hasher, blocksize=65536):

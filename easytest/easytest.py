@@ -69,6 +69,8 @@ class EasyTest(object):
         if execute:
             if self.exe is not None:
                 self._execute()
+            else:
+                assert False, 'No executable specified!'
         if files is not None:
             files2test = self._get_reference_file_list(files)
             assert len(files2test) > 0, 'No testfiles were found in the reference directory! ' + self.refdirectory
@@ -149,7 +151,9 @@ class EasyTest(object):
 
         # execute command line
         cmd = self._get_cmd_list()
-        print 'Command line: ', cmd
+        print 'Running external process:'
+        print '   Command line: ', cmd
+        print '   Directory   : ', os.path.realpath(os.curdir)
         #subprocess.call(cmd, shell=True)  # todo use subprocess
         os.system(cmd)
 

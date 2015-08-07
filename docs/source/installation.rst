@@ -1,25 +1,25 @@
 Installation
 ============
 
+There are different methods to install `easytest`. The first two are for users who just want to use the package, while the last one is for developers. All follow standard practice.
 
 Using pip
 ---------
 
-TBD
+The `easytestpackage is provided on [pip](https://pypi.python.org/pypi/easytest). Install is as easy as::
 
-
-
+    pip install easytest
 
 The standard python way
 -----------------------
 
+You can also download the source code package from the [project website](https://pypi.python.org/pypi/easytest) or from [pip](https://pypi.python.org/pypi/easytest). Unpack the file you obt
+
 TBD
 
 
 
-
-
-From code repository
+From code repository 
 --------------------
 
 Installation from the most recent code repository is also very easy in a few steps::

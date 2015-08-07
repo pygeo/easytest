@@ -14,6 +14,7 @@ Contents:
 
    introduction
    installation
+   tests
    examples
 
 

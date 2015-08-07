@@ -1,5 +1,5 @@
-![Build Status](https://travis-ci.org/pygeo/easytest.png?branch=master)](https://travis-ci.org/pygeo/easytest) ![Documentation Status](https://readthedocs.org/projects/easytest/?badge=latest)](https://readthedocs.org/projects/easytest/?badge=latest)
-
+[![Build Status](https://travis-ci.org/pygeo/easytest.png?branch=master)](https://travis-ci.org/pygeo/easytest)
+[![Documentation Status](https://readthedocs.org/projects/easytest/?badge=latest)](https://readthedocs.org/projects/easytest/?badge=latest)
 
 Easytest
 ========

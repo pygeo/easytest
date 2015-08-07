@@ -13,11 +13,13 @@ The `easytestpackage is provided on `pip <https://pypi.python.org/pypi/easytest>
 The standard python way
 -----------------------
 
-You can also download the source code package from the `project website <https://pypi.python.org/pypi/easytest>`_ or from `pip` <https://pypi.python.org/pypi/easytest>`_. Unpack the file you obt
+You can also download the source code package from the `project website <https://pypi.python.org/pypi/easytest>`_ or from `pip <https://pypi.python.org/pypi/easytest>`_. Unpack the file you obtained into some directory (it can be a temporary directory) and then run::
 
-TBD
+    python setup.py install
+    
+If might be that you might need administrator rights for this step, as the program tries to install into system library pathes. To install into a user specific directory you can just do
 
-
+    python setup.py install --home=xxxxxxxxxx
 
 From code repository 
 --------------------

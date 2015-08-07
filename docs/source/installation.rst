@@ -3,7 +3,7 @@ Installation
 
 There are different methods to install `easytest`. The first two are for users who just want to use the package, while the last one is for developers. All follow standard practice.
 
-*Please note, that only the installation from the code repository was tested so far. It is therefore currently recommended to use that approach until the other installation methods have been thoroughly tested!*
+**Please note, that only the installation from the code repository was tested so far. It is therefore currently recommended to use that approach until the other installation methods have been thoroughly tested!**
 
 Using pip
 ---------

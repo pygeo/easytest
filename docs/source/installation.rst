@@ -5,6 +5,15 @@ There are different methods to install `easytest`. The first two are for users w
 
 **Please note, that only the installation from the code repository was tested so far. It is therefore currently recommended to use that approach until the other installation methods have been thoroughly tested!**
 
+Dependencies
+------------
+
+Here we list required dependencies needed by `easyreport`. Normally these should be installed automatically when doing installation via `pip` or using `setup.py`. If the dependencies are not installed, then you need to install them in advance.
+
+* `nosetests <https://nose.readthedocs.org/en/latest/>`_
+
+
+
 Using pip
 ---------
 

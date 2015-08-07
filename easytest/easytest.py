@@ -7,20 +7,31 @@ import subprocess
 
 
 class EasyTest(object):
-    def __init__(self, exe, args=None, refdirectory=None, output_directory=None):
+    def __init__(self, exe, args=None, refdirectory=None, output_directory=None, checksum_exclude=[]):
         """
         Parameters
         ---------
-        cmd : str
+        exe : str
             command that will be executed at shell
         args : list
-            list with command line arguments
+            list with command line arguments to be appended to executable
+        refdirectory : str
+            reference data directory. From this directory, files will be
+            searched recursively and all will be checked.
+        output_directory : str
+            directory where the results of the simulations are expected
+        checksum_exclude : list
+            list of filename extensions which should be excluded from checksum analysis
+            the background is that e.g. postscript or PDF files will always differ and
+            the produce failures. Checking these file can be excluded.
+            exxample: checksum_exclude=['ps','pdf']
         """
         self.exe = exe
         self.args = args
         self.refdirectory = refdirectory
         self.output_directory = output_directory
         self.sucess = True
+        self.checksum_exclude = checksum_exclude
 
         assert self.refdirectory is not None, 'Reference directory needs to be given!'
         if self.refdirectory[-1] != os.sep:
@@ -44,6 +55,15 @@ class EasyTest(object):
             If 'all' is given instead, then the program automatically
             tries to check for all files which are found in the
             reference data directory
+        graphics : None
+            check if graphics are equal. Not implemented yet
+        checksum_files : list/str
+            list of filenames to be checked using MD5 checksum.
+            If 'all' is given instead, then the program automatically
+            tries to check for all files which are found in the
+            reference data directory
+        execute : bool
+            run external program before performing tests
         """
 
         if execute:
@@ -100,17 +120,6 @@ class EasyTest(object):
 
     def _get_graphic_list(self, files):
         assert False
-
-    def _xxxget_cmd_list(self):
-        """
-        get command list
-        """
-        r = []
-        r.append(self.exe)
-
-        for a in self.args:
-            r.append(a)
-        return r
 
     def _get_cmd_list(self):
         """
@@ -183,12 +192,17 @@ class EasyTest(object):
 
         res = True
         for f in reffiles:
-            cref = self.hashfile(open(f, 'rb'), hashlib.sha256())
+            # exclude files that are in checksum_exclude list
+            # e.g. it does not make sense to perform MD5 analysis of
+            # postscript files as these have most likely always different
+            # headers
+            if os.path.splitext(f)[1][1:] in self.checksum_exclude:
+                continue
 
+            # calculate hash keys
+            cref = self.hashfile(open(f, 'rb'), hashlib.sha256())
             sf = f.replace(self.refdirectory, self.output_directory)
             sfref = self.hashfile(open(sf, 'rb'), hashlib.sha256())
-
-            print sf, f, self.refdirectory, self.output_directory
 
             if cref != sfref:
                 print ''

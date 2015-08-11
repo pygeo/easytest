@@ -44,7 +44,7 @@ class EasyTest(object):
         if self.output_directory[-1] != os.sep:
             self.output_directory += os.sep
 
-    def run_tests(self, files=None, graphics=None, checksum_files=None, execute=True):
+    def run_tests(self, files=None, graphics=None, checksum_files=None, execute=True, check_size=None):
         """
         Execute program and run tests
 
@@ -62,6 +62,8 @@ class EasyTest(object):
             If 'all' is given instead, then the program automatically
             tries to check for all files which are found in the
             reference data directory
+        check_size : list/str
+            same as for checksum, but for checking file sizes
         execute : bool
             run external program before performing tests
         """
@@ -82,6 +84,12 @@ class EasyTest(object):
             files2testchk = self._get_reference_file_list(checksum_files)
             assert len(files2testchk) > 0, 'No testfiles were found in the reference directory for checksum! ' + self.refdirectory
             chk_test = self._test_checksum(files2testchk)
+        if check_size is not None:
+            files2testsize = self._get_reference_file_list(check_size)
+            assert len(files2testsize) > 0, 'No testfiles were found in the reference directory for check size! ' + self.refdirectory
+            chk_size = self._test_filesize(files2testsize)
+
+
         if files is not None:
             if file_test:
                 print 'File     ... SUCESSFULL'
@@ -95,6 +103,14 @@ class EasyTest(object):
             else:
                 print 'Checksum ... FAILED'
                 self.sucess = False
+
+        if check_size is not None:
+            if chk_size:
+                print 'Check size ... SUCESSFULL'
+            else:
+                print 'check size ... FAILED'
+                self.sucess = False
+
 
     def _get_reference_file_list(self, files):
         if type(files) is list:
@@ -182,6 +198,32 @@ class EasyTest(object):
 
     def _test_graphics(self, reffiles):
         assert False
+
+    def _test_filesize(self, reffiles):
+        """
+        test similarity of filesizes
+
+        Parameters
+        ----------
+        reffiles : list
+            list of files to be processed
+        """
+        res = True
+        for f in reffiles:
+            sf = f.replace(self.refdirectory, self.output_directory)
+
+            # filesize in bytes
+            s1 = os.path.getsize(f)
+            s2 = os.path.getsize(sf)
+            if s1 != s2:
+                res = False
+                print ''
+                print('Filesize failure: %s, %s' % (s1,s2))
+                print('File1: %s' % f)
+                print('File2: %s' % sf)
+
+        return res
+
 
     def _test_checksum(self, reffiles):
         """

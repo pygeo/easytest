@@ -56,15 +56,13 @@ class TestData(unittest.TestCase):
         self.assertEqual(len(files), len(ref))
 
     def test_test_files(self):
-
         T = self.T
-
         self.assertTrue(T._test_files(T._get_reference_file_list('all')))
         self.assertFalse(T._test_files(['nope.z']))
 
     def test_execute(self):
         T = self.T
-        T.run_tests(files='all')
+        T.run_tests(files='all', checksum_files='all', check_size='all')
 
     def test_test_checksum(self):
         T = self.T
@@ -78,6 +76,19 @@ class TestData(unittest.TestCase):
 
         self.assertFalse(T._test_checksum([tfile]))
         self.assertTrue(T._test_checksum([self.refdir + 'a.txt']))
+
+    def test_test_filesize(self):
+        T = self.T
+        tdir = tempfile.mkdtemp() + os.sep
+        T.refdirectory = tdir
+        #write some file with different content
+        tfile = tdir + 'a.txt'
+        o=open(tfile,'w')
+        o.write('test1')
+        o.close()
+
+        self.assertFalse(T._test_filesize([tfile]))
+        self.assertTrue(T._test_filesize([self.refdir + 'a.txt']))
 
 
 if __name__ == '__main__':

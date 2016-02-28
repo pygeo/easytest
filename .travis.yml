@@ -11,7 +11,7 @@ branches:
 before_install:
     # general setup
     - sudo apt-get install python-pip
-    - sudo apt-get install libhdf5-openmpi-dev libnetcdf-dev
+    - sudo apt-get install libhdf5-openmpi-dev libnetcdf-dev libopenmpi-dev
     - sudo pip install netCDF4
 
     # test installation from last pypi release

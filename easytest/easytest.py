@@ -167,7 +167,7 @@ class EasyTest(object):
         return sucess
 
 
-    def _compare_netcdf(self, f1, f2, compare_variables=True, compare_values=False):
+    def _compare_netcdf(self, f1, f2, compare_variables=True, compare_values=True):
         F1 = netCDF4.Dataset(f1, mode='r')
         F2 = netCDF4.Dataset(f2, mode='r')
         sucess = True

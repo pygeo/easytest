@@ -11,6 +11,7 @@ branches:
 before_install:
     # general setup
     - sudo apt-get install python-pip
+    - sudo pip install netCDF4
 
     # test installation from last pypi release
     - pip install easytest

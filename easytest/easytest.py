@@ -159,10 +159,11 @@ class EasyTest(object):
         rfiles = self._get_reference_file_list('all')
         sucess = True
         for file1 in rfiles:
-            file2 = file1.replace(self.refdirectory, self.output_directory)
-            res = self._compare_netcdf(file1, file2)
-            if res == False:
-                sucess = False
+            if os.path.splitext(file1)[-1] == '.nc':
+                file2 = file1.replace(self.refdirectory, self.output_directory)
+                res = self._compare_netcdf(file1, file2)
+                if res == False:
+                    sucess = False
         return sucess
 
 

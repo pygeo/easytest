@@ -5,6 +5,11 @@ import hashlib
 import pdb
 import subprocess
 
+import netCDF4
+import numpy as np
+
+
+
 
 class EasyTest(object):
     def __init__(self, exe, args=None, refdirectory=None, output_directory=None, checksum_exclude=[]):
@@ -32,6 +37,7 @@ class EasyTest(object):
         self.output_directory = output_directory
         self.sucess = True
         self.checksum_exclude = checksum_exclude
+        self.supported_extensions = ['nc']  # extensions supported for file content comparison
 
         assert self.refdirectory is not None, 'Reference directory needs to be given!'
         if self.refdirectory[-1] != os.sep:
@@ -44,7 +50,7 @@ class EasyTest(object):
         if self.output_directory[-1] != os.sep:
             self.output_directory += os.sep
 
-    def run_tests(self, files=None, graphics=None, checksum_files=None, execute=True, check_size=None):
+    def run_tests(self, files=None, graphics=None, checksum_files=None, execute=True, check_size=None, check_file_content=None):
         """
         Execute program and run tests
 
@@ -66,6 +72,9 @@ class EasyTest(object):
             same as for checksum, but for checking file sizes
         execute : bool
             run external program before performing tests
+        check_file_content : list
+            list with file extensions for which the content of the files should be checked
+            currently supported options ['nc']
         """
 
         if execute:
@@ -73,22 +82,28 @@ class EasyTest(object):
                 self._execute()
             else:
                 assert False, 'No executable specified!'
+
         if files is not None:
             files2test = self._get_reference_file_list(files)
             assert len(files2test) > 0, 'No testfiles were found in the reference directory! ' + self.refdirectory
             file_test = self._test_files(files2test)
+
         if graphics is not None:
             assert False, 'Graphic testing currently not implemented yet!'
             #self._test_graphics(self._get_graphic_list(graphics))
+
         if checksum_files is not None:
             files2testchk = self._get_reference_file_list(checksum_files)
             assert len(files2testchk) > 0, 'No testfiles were found in the reference directory for checksum! ' + self.refdirectory
             chk_test = self._test_checksum(files2testchk)
+
         if check_size is not None:
             files2testsize = self._get_reference_file_list(check_size)
             assert len(files2testsize) > 0, 'No testfiles were found in the reference directory for check size! ' + self.refdirectory
             chk_size = self._test_filesize(files2testsize)
 
+        if check_file_content is not None:
+            chk_content = self._check_file_contents(check_file_content)
 
         if files is not None:
             if file_test:
@@ -106,11 +121,97 @@ class EasyTest(object):
 
         if check_size is not None:
             if chk_size:
-                print 'Check size ... SUCESSFULL'
+                print('Check size ... SUCESSFULL')
             else:
-                print 'check size ... FAILED'
+                print('Check size ... FAILED')
                 self.sucess = False
 
+        if check_file_content is not None:
+            if chk_content:
+                print('Check content ... SUCESSFULL')
+            else:
+                print('Check content ... FAILED')
+                self.sucess = False
+
+
+    def _check_file_contents(self, exts):
+        """
+        Parameters
+        ----------
+        ext : list
+            list with file extensions
+        """
+        # check that correct file formats are provided
+        for k in exts:
+            if k not in self.supported_extensions:
+                print('File formate not supported yet for explicit comparison: %s' % k)
+                assert False
+
+        # now check file contents for each format
+        sucess = True
+        for k in exts:
+            if k == 'nc':
+                sucess = self._compare_netcdf_files()
+            else:
+                print('ERROR: unsupported file format, no checker implemented yet: %s' % k)
+                sucess = False
+        return sucess
+
+    def _compare_netcdf_files(self):
+        rfiles
+        tfiles
+        sucess = True
+        for rfile in rfiles:
+            res = self._compare_netcdf(file1, file2)
+            if res == False:
+                sucess = False
+        return sucess
+
+
+    def _compare_netcdf(self, f1, f2, compare_variables=True, compare_values=False):
+        F1 = netCDF4.Dataset(f1, mode='r')
+        F2 = netCDF4.Dataset(f2, mode='r')
+        sucess = True
+        if compare_variables:
+            res = self._compare_netcdf_variables(F1,F2)
+            if res == False:
+                sucess = False
+
+        if compare_values:
+            res = self._compare_netcdf_values(F1,F2)
+            if res == False:
+                sucess = False
+
+        F1.close()
+        F2.close()
+        return sucess
+
+    def _compare_netcdf_variables(self, F1, F2):
+        """
+        compare if two netCDF files have the same variables
+        """
+        sucess = True
+        for k in F1.variables.keys():
+            if k not in F2.variables.keys():
+                print F1.variables.keys()
+                print F2.variables.keys()
+                print('Missing variable in one netCDF file: %s' % k)
+                sucess = False
+        return sucess
+
+
+    def _compare_netcdf_values(self, F1, F2):
+        """
+        compare if two netCDF files have the same values
+        """
+        sucess = True
+        for k in F1.variables.keys():
+            d = F1.variables[k][:] - F2.variables[k][:]
+            res = np.all(d == 0.)
+            if res == False:
+                sucess = False
+
+        return sucess
 
     def _get_reference_file_list(self, files):
         if type(files) is list:

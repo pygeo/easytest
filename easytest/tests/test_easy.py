@@ -8,6 +8,9 @@ from easytest import EasyTest
 
 import tempfile
 import os
+from file import File
+import numpy as np
+
 
 class TestData(unittest.TestCase):
 
@@ -89,6 +92,62 @@ class TestData(unittest.TestCase):
 
         self.assertFalse(T._test_filesize([tfile]))
         self.assertTrue(T._test_filesize([self.refdir + 'a.txt']))
+
+    def test_netcdf_compare(self):
+        #self.T = EasyTest(s, l, refdirectory=self.refdir, output_directory = output_directory)
+
+        nx = 10
+        ny = 20
+        variables = ['var1','var2','var3']
+        f1 = tempfile.mktemp(suffix='.nc')
+        f2 = tempfile.mktemp(suffix='.nc')
+        f3 = tempfile.mktemp(suffix='.nc')
+        f4 = tempfile.mktemp(suffix='.nc')
+
+        F1 = File(f1, 'x', 'y', mode='w')
+        F1.create_dimension('x', nx)
+        F1.create_dimension('y', ny)
+
+        F2 = File(f2, 'x', 'y', mode='w')
+        F2.create_dimension('x', nx)
+        F2.create_dimension('y', ny)
+
+        F3 = File(f3, 'x', 'y', mode='w')
+        F3.create_dimension('x', nx)
+        F3.create_dimension('y', ny)
+
+        F4 = File(f4, 'x', 'y', mode='w')
+        F4.create_dimension('x', nx)
+        F4.create_dimension('y', ny)
+
+        cnt = 1
+        for k in variables:
+            x = np.random.random((ny,nx))
+            x = np.ma.array(x, mask=x !=x)
+            F1.append_variable(k, x)
+            F2.append_variable(k, x)  # ... two same files
+            y = np.random.random((ny,nx))
+            y = np.ma.array(y, mask=y !=y)
+            F3.append_variable(k, y)  # ... and one different
+            if cnt == 1:
+                F4.append_variable(k, x)  # one file with different number of variables
+            cnt += 1
+
+        F1.close()
+        F2.close()
+        F3.close()
+        F4.close()
+
+        T = self.T
+        self.assertTrue(T._compare_netcdf(f1, f2, compare_variables=True, compare_values=False))
+        self.assertTrue(T._compare_netcdf(f1, f2, compare_variables=False, compare_values=True))
+        self.assertTrue(T._compare_netcdf(f1, f2, compare_variables=True, compare_values=True))
+
+        self.assertTrue(T._compare_netcdf(f1, f3, compare_variables=True, compare_values=False))
+        self.assertFalse(T._compare_netcdf(f1, f3, compare_variables=False, compare_values=True))
+        self.assertFalse(T._compare_netcdf(f1, f3, compare_variables=True, compare_values=True))
+
+        self.assertFalse(T._compare_netcdf(f1, f4, compare_variables=True, compare_values=False))
 
 
 if __name__ == '__main__':

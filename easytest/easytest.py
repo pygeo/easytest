@@ -156,10 +156,10 @@ class EasyTest(object):
         return sucess
 
     def _compare_netcdf_files(self):
-        rfiles
-        tfiles
+        rfiles = self._get_reference_file_list('all')
         sucess = True
-        for rfile in rfiles:
+        for file1 in rfiles:
+            file2 = file1.replace(self.refdirectory, self.output_directory)
             res = self._compare_netcdf(file1, file2)
             if res == False:
                 sucess = False

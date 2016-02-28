@@ -26,8 +26,7 @@ from setuptools import setup, Extension
 from setuptools import find_packages  # Always prefer setuptools over distutils
 #~ from Cython.Distutils import build_ext
 
-#~ install_requires = ["numpy>0.1", "cdo>1.2", "netCDF4", "pytz",
-                    #~ "matplotlib", 'shapely', 'cartopy', 'cython', 'scipy']
+install_requires = ["numpy>0.1", "netCDF4"]
 
 
 

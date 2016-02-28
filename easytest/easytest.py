@@ -9,8 +9,6 @@ import netCDF4
 import numpy as np
 
 
-
-
 class EasyTest(object):
     def __init__(self, exe, args=None, refdirectory=None, output_directory=None, checksum_exclude=[]):
         """

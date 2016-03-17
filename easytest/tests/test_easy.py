@@ -149,6 +149,10 @@ class TestData(unittest.TestCase):
 
         self.assertFalse(T._compare_netcdf(f1, f4, compare_variables=True, compare_values=False))
 
+        # subsetting
+        self.assertTrue(T._compare_netcdf(f1, f2, compare_variables=False, compare_values=True, allow_subset=False))
+        #~ self.assertTrue(T._compare_netcdf(f1, f2, compare_variables=False, compare_values=True, allow_subset=True))
+
 
 if __name__ == '__main__':
     unittest.main()

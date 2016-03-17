@@ -167,9 +167,19 @@ class EasyTest(object):
         return sucess
 
 
-    def _compare_netcdf(self, f1, f2, compare_variables=True, compare_values=True):
+    def _compare_netcdf(self, f1, f2, compare_variables=True, compare_values=True, allow_subset=False):
+        """
+        compare content of two netCDF files
+        if the two files have different lengths
+
+        Parameters
+        ----------
+        allow_subset : bool
+            allow that only a slice of the datasets is compared
+        """
         F1 = netCDF4.Dataset(f1, mode='r')
         F2 = netCDF4.Dataset(f2, mode='r')
+
         sucess = True
         if compare_variables:
             res = self._compare_netcdf_variables(F1,F2)
@@ -177,7 +187,7 @@ class EasyTest(object):
                 sucess = False
 
         if compare_values:
-            res = self._compare_netcdf_values(F1,F2)
+            res = self._compare_netcdf_values(F1,F2, allow_subset=allow_subset)
             if res == False:
                 sucess = False
 
@@ -199,14 +209,27 @@ class EasyTest(object):
         return sucess
 
 
-    def _compare_netcdf_values(self, F1, F2):
+    def _compare_netcdf_values(self, F1, F2, allow_subset=False):
         """
         compare if two netCDF files have the same values
         """
         sucess = True
         for k in F1.variables.keys():
-            d = F1.variables[k][:] - F2.variables[k][:]
-            res = np.all(d == 0.)
+            x1 = F1.variables[k][:]
+            x2 = F2.variables[k][:]
+
+            n1 = len(x1)
+            n2 = len(x2)
+
+            if allow_subset:  # allow that only a subset of data is compared
+                assert False
+            else:
+                if n1 == n2:
+                    d = x1 - x2
+                    res = np.all(d == 0.)
+                else:
+                    res = False
+
             if res == False:
                 sucess = False
 

@@ -8,8 +8,8 @@ The following tests are currently implemented:
 * *Check filesize:* The size of two files is compared.
 * *Check file content:* compares the content of two files. This is currenlty supported for the following formats
  * *netcdf*
-  * comparison of variable names
-  * comparison of similarity of data fields
+ - comparison of variable names
+ - comparison of similarity of data fields
 
 The following tests are planned for future implementations:
 

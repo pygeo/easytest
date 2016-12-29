@@ -10,7 +10,7 @@ import numpy as np
 
 
 class EasyTest(object):
-    def __init__(self, exe, args=None, refdirectory=None, output_directory=None, checksum_exclude=[]):
+    def __init__(self, exe, args=None, refdirectory=None, files=None, output_directory=None, checksum_exclude=[]):
         """
         Parameters
         ---------
@@ -21,6 +21,9 @@ class EasyTest(object):
         refdirectory : str
             reference data directory. From this directory, files will be
             searched recursively and all will be checked.
+        files : list
+            as an alternative, the file list can be provided directly
+            then the refdirectory is ignored
         output_directory : str
             directory where the results of the simulations are expected
         checksum_exclude : list
@@ -32,14 +35,19 @@ class EasyTest(object):
         self.exe = exe
         self.args = args
         self.refdirectory = refdirectory
+        self.files2check = files
         self.output_directory = output_directory
         self.sucess = True
         self.checksum_exclude = checksum_exclude
         self.supported_extensions = ['nc']  # extensions supported for file content comparison
 
-        assert self.refdirectory is not None, 'Reference directory needs to be given!'
-        if self.refdirectory[-1] != os.sep:
-            self.refdirectory += os.sep
+        if self.refdirectory is not None:
+            assert self.files2check is None, 'Either the REFDIRECTORY or the FILELIST can be provided, but not both together'
+            if self.refdirectory[-1] != os.sep:
+                self.refdirectory += os.sep
+        else:
+            assert self.files2check is not None, 'Either the REFDIRECTORY or the FILELIST can be provided, but not both together'
+
 
         assert self.output_directory is not None, 'Output directory needs to be given!'
         if not os.path.exists(self.output_directory):
@@ -82,20 +90,26 @@ class EasyTest(object):
                 assert False, 'No executable specified!'
 
         if files is not None:
-            files2test = self._get_reference_file_list(files)
-            assert len(files2test) > 0, 'No testfiles were found in the reference directory! ' + self.refdirectory
-            file_test = self._test_files(files2test)
+            if self.files2check is None:  # from reference directory
+                files2test = self._get_reference_file_list(files)
+                assert len(files2test) > 0, 'No testfiles were found in the reference directory! ' + self.refdirectory
+                file_test = self._test_files(files2test)
+            else:
+                files2test = self.files2check
+                file_test = self._test_files(files2test, replace_path=False)
 
         if graphics is not None:
             assert False, 'Graphic testing currently not implemented yet!'
             #self._test_graphics(self._get_graphic_list(graphics))
 
         if checksum_files is not None:
+            assert self.files2check is None, 'CHECKSUM test can not be performed when no reference directory is used'
             files2testchk = self._get_reference_file_list(checksum_files)
             assert len(files2testchk) > 0, 'No testfiles were found in the reference directory for checksum! ' + self.refdirectory
             chk_test = self._test_checksum(files2testchk)
 
         if check_size is not None:
+            assert self.files2check is None, 'CHECKSIZE test can not be performed when no reference directory is used'
             files2testsize = self._get_reference_file_list(check_size)
             assert len(files2testsize) > 0, 'No testfiles were found in the reference directory for check size! ' + self.refdirectory
             chk_size = self._test_filesize(files2testsize)
@@ -299,7 +313,7 @@ class EasyTest(object):
         if wdir !='.':
             os.chdir(curdir)
 
-    def _test_files(self, reffiles):
+    def _test_files(self, reffiles, replace_path=True):
         """
         test availability of files
 
@@ -311,7 +325,10 @@ class EasyTest(object):
         res = True
         for f in reffiles:
             # get list of expected plot files
-            sf = f.replace(self.refdirectory,self.output_directory) #+ os.path.basename(f)
+            if replace_path:
+                sf = f.replace(self.refdirectory,self.output_directory)
+            else:
+                sf=f
             if os.path.exists(sf):
                 pass
             else:

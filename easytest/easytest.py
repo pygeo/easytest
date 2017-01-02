@@ -10,7 +10,7 @@ import numpy as np
 
 
 class EasyTest(object):
-    def __init__(self, exe, args=None, refdirectory=None, files=None, output_directory=None, checksum_exclude=[]):
+    def __init__(self, exe, args=None, refdirectory=None, files=None, output_directory=None, checksum_exclude=[], basedir='.', switch_back = True, **kwargs):
         """
         Parameters
         ---------
@@ -31,6 +31,10 @@ class EasyTest(object):
             the background is that e.g. postscript or PDF files will always differ and
             the produce failures. Checking these file can be excluded.
             exxample: checksum_exclude=['ps','pdf']
+        basedir : str
+            name of directory where the tests will be executed
+        switch_back : Bool
+            if True, then directory is switched back to current directory after performing tests
         """
         self.exe = exe
         self.args = args
@@ -40,6 +44,9 @@ class EasyTest(object):
         self.sucess = True
         self.checksum_exclude = checksum_exclude
         self.supported_extensions = ['nc']  # extensions supported for file content comparison
+
+        self.basedir = basedir
+        self._switch_back = switch_back
 
         if self.refdirectory is not None:
             assert self.files2check is None, 'Either the REFDIRECTORY or the FILELIST can be provided, but not both together'
@@ -286,7 +293,7 @@ class EasyTest(object):
             r += ' ' + a
         return r
 
-    def _execute(self, wdir='.'):
+    def _execute(self):
         """
         run the actual program
 
@@ -298,9 +305,8 @@ class EasyTest(object):
         wdir : str
             working directory
         """
-        if wdir != '.':
-            curdir = os.path.realpath(os.curdir)
-            os.chdir(wdir)
+
+        self._change_wrk_dir()
 
         # execute command line
         cmd = self._get_cmd_list()
@@ -310,8 +316,18 @@ class EasyTest(object):
         #subprocess.call(cmd, shell=True)  # todo use subprocess
         os.system(cmd)
 
-        if wdir !='.':
-            os.chdir(curdir)
+        self._change_wkr_dir_back()
+
+
+    def _change_wrk_dir(self):
+        self._curdir = os.path.realpath(os.curdir)
+        if self.basedir != '.':
+            os.chdir(self.basedir)
+
+    def _change_wkr_dir_back(self):
+        if self._switch_back:
+            os.chdir(self._curdir)
+
 
     def _test_files(self, reffiles, replace_path=True):
         """

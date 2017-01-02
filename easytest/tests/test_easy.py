@@ -26,11 +26,11 @@ class TestData(unittest.TestCase):
             o.write('test')
             o.close()
 
-        output_directory = tempfile.mkdtemp() + os.sep
-        os.system('cp -r ' + self.refdir + '* ' +  output_directory)
-        s = 'echo "Hello world"'
-        l = ['a', 'xx', 'b']
-        self.T = EasyTest(s, l, refdirectory=self.refdir, output_directory = output_directory)
+        self._output_directory = tempfile.mkdtemp() + os.sep
+        os.system('cp -r ' + self.refdir + '* ' +  self._output_directory)
+        self._s = 'echo "Hello world"'
+        self._l = ['a', 'xx', 'b']
+        self.T = EasyTest(self._s, self._l, refdirectory=self.refdir, output_directory = self._output_directory)
 
     def test_init(self):
         T = self.T
@@ -40,6 +40,7 @@ class TestData(unittest.TestCase):
         for i in xrange(len(l)):
             self.assertEqual(l[i],T.args[i])
         self.assertEqual(T.refdirectory, self.refdir)
+
 
     def test_get_reference_file_list(self):
         T = self.T
@@ -66,6 +67,18 @@ class TestData(unittest.TestCase):
     def test_execute(self):
         T = self.T
         T.run_tests(files='all', checksum_files='all', check_size='all')
+
+    def test_basedir(self):
+        curdir = os.path.abspath(os.curdir)
+        tdir = tempfile.mkdtemp()
+        T = EasyTest(self._s, self._l, refdirectory=self.refdir, output_directory = self._output_directory, basedir=tdir, switch_back=False)
+        T.run_tests(files='all', checksum_files='all', check_size='all')
+        self.assertEqual(os.path.abspath(os.curdir), tdir)
+        os.chdir(curdir)
+
+        T = EasyTest(self._s, self._l, refdirectory=self.refdir, output_directory = self._output_directory, basedir=tdir, switch_back=True)
+        T.run_tests(files='all', checksum_files='all', check_size='all')
+        self.assertEqual(os.path.abspath(os.curdir), curdir)
 
     def test_test_checksum(self):
         T = self.T

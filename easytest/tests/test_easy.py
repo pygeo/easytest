@@ -106,6 +106,34 @@ class TestData(unittest.TestCase):
         self.assertFalse(T._test_filesize([tfile]))
         self.assertTrue(T._test_filesize([self.refdir + 'a.txt']))
 
+    def test_test_filesize_gt_0(self):
+        T = self.T
+        tdir = tempfile.mkdtemp() + os.sep
+        T.refdirectory = tdir
+        #write some file with different content
+        tfile1 = tdir + 'a.txt'
+        o=open(tfile1,'w')
+        o.write('test1')
+        o.close()
+
+        tfile2 = tdir + 'b.txt'
+        o=open(tfile2,'w')
+        o.write('test2')
+        o.close()
+
+        tfile3 = tdir + 'c.txt'  # empty file
+        o=open(tfile3,'w')
+        o.close()
+
+        self.assertTrue(T._test_filesize_gt_0([tfile1, tfile2]))
+        self.assertFalse(T._test_filesize_gt_0([tfile3]))
+        self.assertFalse(T._test_filesize_gt_0([tfile1, tfile2, tfile3]))
+        self.assertFalse(T._test_filesize_gt_0([tfile3, tfile2, tfile1]))
+
+
+
+
+
     def test_netcdf_compare(self):
         #self.T = EasyTest(s, l, refdirectory=self.refdir, output_directory = output_directory)
 

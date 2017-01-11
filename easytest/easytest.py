@@ -63,7 +63,7 @@ class EasyTest(object):
         if self.output_directory[-1] != os.sep:
             self.output_directory += os.sep
 
-    def run_tests(self, files=None, graphics=None, checksum_files=None, execute=True, check_size=None, check_file_content=None):
+    def run_tests(self, files=None, graphics=None, checksum_files=None, execute=True, check_size=None, check_file_content=None, check_size_gt_zero=None):
         """
         Execute program and run tests
 
@@ -121,6 +121,15 @@ class EasyTest(object):
             assert len(files2testsize) > 0, 'No testfiles were found in the reference directory for check size! ' + self.refdirectory
             chk_size = self._test_filesize(files2testsize)
 
+        if check_size_gt_zero is not None:
+            if self.files2check is None:  # from reference directory
+                files2test = self._get_reference_file_list(files)
+                assert len(files2test) > 0, 'No testfiles were found in the reference directory! ' + self.refdirectory
+            else:
+                files2test = self.files2check
+            chk_size0 = self._test_filesize_gt_0(files2test)
+
+
         if check_file_content is not None:
             chk_content = self._check_file_contents(check_file_content)
 
@@ -143,6 +152,13 @@ class EasyTest(object):
                 print('Check size ... SUCESSFULL')
             else:
                 print('Check size ... FAILED')
+                self.sucess = False
+
+        if check_size_gt_zero is not None:
+            if chk_size0:
+                print('Check size > 0 ... SUCESSFULL')
+            else:
+                print('Check size > 0  ... FAILED')
                 self.sucess = False
 
         if check_file_content is not None:
@@ -354,6 +370,27 @@ class EasyTest(object):
 
     def _test_graphics(self, reffiles):
         assert False
+
+
+    def _test_filesize_gt_0(self, reffiles):
+        """
+        test that filesizes are all > 0 bytes
+
+        Parameters
+        ----------
+        reffiles : list
+            list of files to be processed
+        """
+        res = True
+        for f in reffiles:
+            # filesize in bytes
+            s = os.path.getsize(f)
+            if s > 0.:
+                pass
+            else:
+                res = False
+        return res
+
 
     def _test_filesize(self, reffiles):
         """

@@ -88,6 +88,8 @@ class EasyTest(object):
         check_file_content : list
             list with file extensions for which the content of the files should be checked
             currently supported options ['nc']
+        check_size_gt_zero : bool
+            if True, then all output files are checked to have sizes > 0 bytes
         """
 
         if execute:

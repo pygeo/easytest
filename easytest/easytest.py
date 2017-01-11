@@ -131,7 +131,6 @@ class EasyTest(object):
                 files2test = self.files2check
             chk_size0 = self._test_filesize_gt_0(files2test)
 
-
         if check_file_content is not None:
             chk_content = self._check_file_contents(check_file_content)
 
@@ -204,7 +203,6 @@ class EasyTest(object):
                 if res == False:
                     sucess = False
         return sucess
-
 
     def _compare_netcdf(self, f1, f2, compare_variables=True, compare_values=True, allow_subset=False):
         """

@@ -2,6 +2,8 @@
 """
 """
 
+import sys
+sys.path.append('..')
 import unittest
 
 from easytest import EasyTest

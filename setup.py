@@ -87,6 +87,8 @@ setup(name='easytest',
 ########################################################################
 
 # PIP
-#~ python setup.py register
-#~ python setup.py sdist
-#~ python setup.py upload
+# 1) on a new computer you need to create a .pypirc file like described in the
+# pypi documentation
+# 2) install twine using pip install twine
+# 3) generate package using: python setup.py sdist
+# 4) just upload using twine upload dist/*

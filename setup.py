@@ -4,10 +4,10 @@
 # https://python-packaging-user-guide.readthedocs.org/en/latest/index.html
 
 from setuptools import setup
-from distutils.core import setup as setup_dist  # todo use only one setup
+# from distutils.core import setup as setup_dist  # todo use only one setup
 
-import os
-import glob
+#import os
+#import glob
 
 # the setuptools are supposed to be used as a standard. Thats why we ommit
 # usage of distutils here
@@ -18,15 +18,14 @@ import glob
 # a small example how to build dependencies is given here:
 # http://stackoverflow.com/questions/11010151/distributing-a-shared-library-and-some-c-code-with-a-cython-extension-module
 
-import os
-import numpy as np
-import json
+#import os
+#import numpy as np
+#import json
 
-from setuptools import setup, Extension
 from setuptools import find_packages  # Always prefer setuptools over distutils
 #~ from Cython.Distutils import build_ext
 
-install_requires = ["numpy>0.1", "netCDF4"]
+install_requires = ["numpy>1.0", "netCDF4"]
 
 
 

@@ -7,9 +7,4 @@ Easytest is a python package that allows to perform tests of arbitrary programs 
 * check their output by
  - comparison against given reference data
  - performing plausibility checks on the output
- - compare the conten of the output against reference data
-
-It currently supports the comparison of the content of different file formates, namely:
-
-* netCDF
-* ...
+ - compare the content of the output against reference data

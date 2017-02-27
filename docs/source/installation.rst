@@ -1,7 +1,16 @@
 Installation
 ============
 
-There are different methods to install `easytest`. The first two are for users who just want to use the package, while the last one is for developers. All follow standard practice.
+There are different methods to install `easytest`.
+
+Using conda
+-----------
+
+The `easytest`package can be installed using conda as::
+
+    conda install [-n YOURENV] -c conda-forge easytest
+
+This will resolve also automatically for any potential dependencies.
 
 
 Using pip
@@ -9,12 +18,11 @@ Using pip
 
 The `easytest` package is provided on `pip <https://pypi.python.org/pypi/easytest>`_. Installation is as easy as::
 
-    pip install easytest
+    pip install easytest    
+    
 
 The standard python way
 -----------------------
-
-**Note that this has not been tested yet, but is supposed to work**
 
 You can also download the source code package from the `project website <https://pypi.python.org/pypi/easytest>`_ or from `pip <https://pypi.python.org/pypi/easytest>`_. Unpack the file you obtained into some directory (it can be a temporary directory) and then run::
 
@@ -38,7 +46,6 @@ Installation from the most recent code repository is also very easy in a few ste
     echo PYTHONPATH
 
 
-
 Test installation sucess
 ------------------------
 Independent how you installed `easytest`, you should test that it was sucessfull by the following tests::
@@ -46,5 +53,6 @@ Independent how you installed `easytest`, you should test that it was sucessfull
     python -c "import easytest"
 
 If you don't get an error message, the module import was sucessfull.
+
 
 

@@ -20,4 +20,6 @@ The following code compares the content of two directories. The reference direct
   T = EasyTest(None, refdirectory=rdir, output_directory=tdir)
   T.run_tests(files='all', checksum_files='all')
 
-Two kind of tests are performed in this example: a) check for file existence b) check for file content using MD5 checksums
+Two kind of tests are performed in this example:
+ a) check for file existence
+ b) check for file content using MD5 checksums for all files

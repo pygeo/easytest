@@ -1,9 +1,9 @@
 language: python
 python:
-    - "2.7"
-    - "3.4"
-    - "3.5"
-    - "3.6"
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
 
 virtualenv:
   system_site_packages: true
@@ -13,21 +13,27 @@ branches:
         - master
 
 before_install:
-    # general setup
-    - sudo apt-get install python-pip
-    - sudo apt-get install libhdf5-openmpi-dev libnetcdf-dev libopenmpi-dev
+  - sudo apt-get update
 
-    - sudo apt-get install libgdal1h
-    - sudo apt-get install libgdal-dev
+install:
+    pip install netcdf4
 
-    - sudo pip install netCDF4
-
-    # test installation from last pypi release
-    - pip install easytest
-    - pip uninstall -y easytest
+# before_install:
+#     # general setup
+#     - sudo apt-get install python-pip
+#     - sudo apt-get install libhdf5-openmpi-dev libnetcdf-dev libopenmpi-dev
+# 
+#     - sudo apt-get install libgdal1h
+#     - sudo apt-get install libgdal-dev
+# 
+#     - sudo pip install netCDF4
+# 
+#     # test installation from last pypi release
+#     - pip install easytest
+#     - pip uninstall -y easytest
 
 script:
-- nosetests
+ - nosetests
 
 
 

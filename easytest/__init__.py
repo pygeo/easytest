@@ -1,1 +1,1 @@
-from easytest import *
+from . easytest import *

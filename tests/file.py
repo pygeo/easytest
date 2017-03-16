@@ -38,8 +38,8 @@ class File(object):
         out[x.mask] = dummy
         self.F.variables[vname][:,:] = out[:,:]
         try:
-            fval = self.F.variables[vname].getncattr('_FillValue')
-            print 'Fill value already existing ... will not be set!'
+            # fval = self.F.variables[vname].getncattr('_FillValue')
+            print('Fill value already existing ... will not be set!')
         except:
             self.F.variables[vname].setncattr('_FillValue', dummy)
 

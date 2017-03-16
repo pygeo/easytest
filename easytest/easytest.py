@@ -444,7 +444,7 @@ class EasyTest(object):
 
             if cref != sfref:
                 print('')
-                print('Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex'))
+                print('Different sha256 key: ', os.path.basename(f)) #, cref.encode('hex'), sfref.encode('hex'))
                 print(sf)
                 print(f)
                 res = False

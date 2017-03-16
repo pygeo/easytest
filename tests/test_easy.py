@@ -40,7 +40,7 @@ class TestData(unittest.TestCase):
         s = 'echo "Hello world"'
         self.assertEqual(T.exe, s)
         l = ['a', 'xx', 'b']
-        for i in xrange(len(l)):
+        for i in range(len(l)):
             self.assertEqual(l[i],T.args[i])
         self.assertEqual(T.refdirectory, self.refdir)
 

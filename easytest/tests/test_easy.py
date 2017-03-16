@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import print_function
 
 import sys
 sys.path.append('..')
@@ -48,7 +49,7 @@ class TestData(unittest.TestCase):
         T = self.T
 
         files = T._get_reference_file_list('all')
-        print self.files
+        print(self.files)
         for f in files:
             self.assertTrue(f.replace(self.refdir,'') in self.files)
             self.assertTrue(self.refdir in f)

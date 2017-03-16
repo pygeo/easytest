@@ -1,10 +1,9 @@
+'''
+Easytest main module
+'''
 
 import os
-# import glob
 import hashlib
-# import pdb
-# import subprocess
-
 import netCDF4
 import numpy as np
 
@@ -136,16 +135,16 @@ class EasyTest(object):
 
         if files is not None:
             if file_test:
-                print 'File     ... SUCESSFULL'
+                print('File     ... SUCESSFULL')
             else:
-                print 'File     ... FAILED'
+                print('File     ... FAILED')
                 self.sucess = False
 
         if checksum_files is not None:
             if chk_test:
-                print 'Checksum ... SUCESSFULL'
+                print('Checksum ... SUCESSFULL')
             else:
-                print 'Checksum ... FAILED'
+                print('Checksum ... FAILED')
                 self.sucess = False
 
         if check_size is not None:
@@ -239,8 +238,8 @@ class EasyTest(object):
         sucess = True
         for k in F1.variables.keys():
             if k not in F2.variables.keys():
-                print F1.variables.keys()
-                print F2.variables.keys()
+                print(F1.variables.keys())
+                print(F2.variables.keys())
                 print('Missing variable in one netCDF file: %s' % k)
                 sucess = False
         return sucess
@@ -326,9 +325,9 @@ class EasyTest(object):
 
         # execute command line
         cmd = self._get_cmd_list()
-        print 'Running external process:'
-        print '   Command line: ', cmd
-        print '   Directory   : ', os.path.realpath(os.curdir)
+        print ('Running external process:')
+        print('   Command line: ', cmd)
+        print('   Directory   : ', os.path.realpath(os.curdir))
         #subprocess.call(cmd, shell=True)  # todo use subprocess
         os.system(cmd)
 
@@ -365,7 +364,7 @@ class EasyTest(object):
                 pass
             else:
                 res = False
-                print 'Failure: ', sf
+                print('Failure: ', sf)
         return res
 
     def _test_graphics(self, reffiles):
@@ -410,7 +409,7 @@ class EasyTest(object):
             s2 = os.path.getsize(sf)
             if s1 != s2:
                 res = False
-                print ''
+                print('')
                 print('Filesize failure: %s, %s' % (s1,s2))
                 print('File1: %s' % f)
                 print('File2: %s' % sf)
@@ -444,10 +443,10 @@ class EasyTest(object):
             sfref = self.hashfile(open(sf, 'rb'), hashlib.sha256())
 
             if cref != sfref:
-                print ''
-                print 'Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex')
-                print sf
-                print f
+                print('')
+                print('Different sha256 key: ', os.path.basename(f), cref.encode('hex'), sfref.encode('hex'))
+                print(sf)
+                print(f)
                 res = False
 
         return res

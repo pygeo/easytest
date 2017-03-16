@@ -14,6 +14,9 @@ branches:
 
 before_install:
   - sudo apt-get update
+  - sudo apt-get install libhdf5-openmpi-dev libnetcdf-dev libopenmpi-dev
+  - sudo apt-get install libgdal1h
+  - sudo apt-get install libgdal-dev
 
 install:
     pip install netcdf4

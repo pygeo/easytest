@@ -6,11 +6,7 @@ python:
   - "3.6"
 
 virtualenv:
-  system_site_packages: true
-
-branches:
-    only:
-        - master
+system_site_packages: true
 
 before_install:
   - sudo apt-get update

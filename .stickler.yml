@@ -3,4 +3,4 @@ linters:
     flake8:
     pep8:
 files:
-    ignore: ['backend/preprocessor.py']
+    ignore: []

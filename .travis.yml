@@ -15,7 +15,12 @@ before_install:
   - sudo apt-get install libgdal-dev
 
 install:
-    pip install netcdf4
+  - pip install netcdf4
+   
+  # test installation from pip
+  - pip install easytest
+  - python -c "from easytest import *"
+  - yes | pip uninstall easytest
 
 # before_install:
 #     # general setup

@@ -3,8 +3,8 @@ Installation
 
 There are different methods to install `easytest`.
 
-Using conda
------------
+Using conda (not working yet)
+-----------------------------
 
 The `easytest`package can be installed using conda as::
 

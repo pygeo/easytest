@@ -9,7 +9,7 @@ import numpy as np
 
 
 class EasyTest(object):
-    def __init__(self, exe, args=None, refdirectory=None, files=None, output_directory=None, checksum_exclude=[], basedir='.', switch_back = True, **kwargs):
+    def __init__(self, exe, args=None, refdirectory=None, files=None, output_directory=None, checksum_exclude=[], basedir='.', switch_back=True, **kwargs):
         """
         Parameters
         ---------
@@ -53,7 +53,6 @@ class EasyTest(object):
                 self.refdirectory += os.sep
         else:
             assert self.files2check is not None, 'Either the REFDIRECTORY or the FILELIST can be provided, but not both together'
-
 
         assert self.output_directory is not None, 'Output directory needs to be given!'
         if not os.path.exists(self.output_directory):
@@ -168,7 +167,6 @@ class EasyTest(object):
                 print('Check content ... FAILED')
                 self.sucess = False
 
-
     def _check_file_contents(self, exts):
         """
         Parameters
@@ -218,12 +216,12 @@ class EasyTest(object):
 
         sucess = True
         if compare_variables:
-            res = self._compare_netcdf_variables(F1,F2)
+            res = self._compare_netcdf_variables(F1, F2)
             if res == False:
                 sucess = False
 
         if compare_values:
-            res = self._compare_netcdf_values(F1,F2, allow_subset=allow_subset)
+            res = self._compare_netcdf_values(F1, F2, allow_subset=allow_subset)
             if res == False:
                 sucess = False
 
@@ -243,7 +241,6 @@ class EasyTest(object):
                 print('Missing variable in one netCDF file: %s' % k)
                 sucess = False
         return sucess
-
 
     def _compare_netcdf_values(self, F1, F2, allow_subset=False):
         """
@@ -291,8 +288,8 @@ class EasyTest(object):
         import fnmatch
         matches = []
         for root, dirnames, filenames in os.walk(self.refdirectory):
-          for filename in fnmatch.filter(filenames, '*'):
-            matches.append(os.path.join(root, filename))
+            for filename in fnmatch.filter(filenames, '*'):
+                matches.append(os.path.join(root, filename))
         return matches
 
     def _get_graphic_list(self, files):
@@ -333,7 +330,6 @@ class EasyTest(object):
 
         self._change_wkr_dir_back()
 
-
     def _change_wrk_dir(self):
         self._curdir = os.path.realpath(os.curdir)
         if self.basedir != '.':
@@ -342,7 +338,6 @@ class EasyTest(object):
     def _change_wkr_dir_back(self):
         if self._switch_back:
             os.chdir(self._curdir)
-
 
     def _test_files(self, reffiles, replace_path=True):
         """
@@ -357,9 +352,9 @@ class EasyTest(object):
         for f in reffiles:
             # get list of expected plot files
             if replace_path:
-                sf = f.replace(self.refdirectory,self.output_directory)
+                sf = f.replace(self.refdirectory, self.output_directory)
             else:
-                sf=f
+                sf = f
             if os.path.exists(sf):
                 pass
             else:
@@ -369,7 +364,6 @@ class EasyTest(object):
 
     def _test_graphics(self, reffiles):
         assert False
-
 
     def _test_filesize_gt_0(self, reffiles):
         """
@@ -390,7 +384,6 @@ class EasyTest(object):
                 res = False
         return res
 
-
     def _test_filesize(self, reffiles):
         """
         test similarity of filesizes
@@ -410,12 +403,11 @@ class EasyTest(object):
             if s1 != s2:
                 res = False
                 print('')
-                print('Filesize failure: %s, %s' % (s1,s2))
+                print('Filesize failure: %s, %s' % (s1, s2))
                 print('File1: %s' % f)
                 print('File2: %s' % sf)
 
         return res
-
 
     def _test_checksum(self, reffiles):
         """
@@ -444,7 +436,7 @@ class EasyTest(object):
 
             if cref != sfref:
                 print('')
-                print('Different sha256 key: ', os.path.basename(f)) #, cref.encode('hex'), sfref.encode('hex'))
+                print('Different sha256 key: ', os.path.basename(f))  # , cref.encode('hex'), sfref.encode('hex'))
                 print(sf)
                 print(f)
                 res = False

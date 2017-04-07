@@ -36,7 +36,7 @@ def get_packages():
 
 setup(name='easytest',
 
-      version='0.1.4',
+      version='0.1.5',
 
       description='easytest - a framework for simple automated testing',
 

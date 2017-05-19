@@ -9,7 +9,7 @@ import numpy as np
 
 
 class EasyTest(object):
-    def __init__(self, exe, args=None, refdirectory=None, files=None, output_directory=None, checksum_exclude=[], basedir='.', switch_back=True, **kwargs):
+    def __init__(self, exe, args=None, refdirectory=None, files=None, output_directory=None, checksum_exclude=None, basedir='.', switch_back=True, **kwargs):
         """
         Parameters
         ---------
@@ -25,7 +25,7 @@ class EasyTest(object):
             then the refdirectory is ignored
         output_directory : str
             directory where the results of the simulations are expected
-        checksum_exclude : list
+        checksum_exclude : list, None
             list of filename extensions which should be excluded from checksum analysis
             the background is that e.g. postscript or PDF files will always differ and
             the produce failures. Checking these file can be excluded.
@@ -35,6 +35,8 @@ class EasyTest(object):
         switch_back : Bool
             if True, then directory is switched back to current directory after performing tests
         """
+        if checksum_exclude is None:
+            checksum_exclude = []
         self.exe = exe
         self.args = args
         self.refdirectory = refdirectory

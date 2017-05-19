@@ -40,8 +40,8 @@ class TestData(unittest.TestCase):
         s = 'echo "Hello world"'
         self.assertEqual(T.exe, s)
         l = ['a', 'xx', 'b']
-        for i in range(len(l)):
-            self.assertEqual(l[i], T.args[i])
+        for i, v in enumerate(l):
+            self.assertEqual(v, T.args[i])
         self.assertEqual(T.refdirectory, self.refdir)
 
     def test_get_reference_file_list(self):

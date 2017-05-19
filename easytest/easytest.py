@@ -271,7 +271,7 @@ class EasyTest(object):
         return sucess
 
     def _get_reference_file_list(self, files):
-        if type(files) is list:
+        if isinstance(files, list):
             r = []
             for f in files:
                 r.append(self.refdirectory + os.path.basename(f))

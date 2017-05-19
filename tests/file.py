@@ -29,7 +29,7 @@ class File(object):
         self.F.variables[vname].setncattr('units', 'degrees_east')
 
     def append_variable(self, vname, x):
-        assert type(x) is np.ma.core.MaskedArray, 'Input needs to be masked array!'
+        assert isinstance(x, np.ma.core.MaskedArray), 'Input needs to be masked array!'
         dummy = -99999.
         assert x.ndim == 2
         self._create_variable(vname, 'd', (self.ydim, self.xdim), fill_value=dummy)

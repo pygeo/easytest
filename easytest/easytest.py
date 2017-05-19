@@ -449,7 +449,7 @@ class EasyTest(object):
                 res = False
 
         return res
-    
+ 
     @classmethod
     def hashfile(cls, afile, hasher, blocksize=65536):
         """

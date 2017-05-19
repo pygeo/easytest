@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/pygeo/easytest.png?branch=master)](https://travis-ci.org/pygeo/easytest) [![Documentation Status](https://readthedocs.org/projects/easytest/badge/?version=latest)](https://readthedocs.org/projects/easytest/?badge=latest)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0036a3e44e5b427d90b2567ad2ab57f1)](https://www.codacy.com/app/bulli92/easytest?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pygeo/easytest&amp;utm_campaign=Badge_Grade)
 
 Easytest
 ========

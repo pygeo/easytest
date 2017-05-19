@@ -231,7 +231,8 @@ class EasyTest(object):
         F2.close()
         return sucess
 
-    def _compare_netcdf_variables(self, F1, F2):
+    @classmethod
+    def _compare_netcdf_variables(cls, F1, F2):
         """
         compare if two netCDF files have the same variables
         """
@@ -244,7 +245,8 @@ class EasyTest(object):
                 sucess = False
         return sucess
 
-    def _compare_netcdf_values(self, F1, F2, allow_subset=False):
+    @classmethod
+    def _compare_netcdf_values(cls, F1, F2, allow_subset=False):
         """
         compare if two netCDF files have the same values
         """
@@ -294,7 +296,8 @@ class EasyTest(object):
                 matches.append(os.path.join(root, filename))
         return matches
 
-    def _get_graphic_list(self, files):
+    @classmethod
+    def _get_graphic_list(cls, files):
         assert False
 
     def _get_cmd_list(self):
@@ -364,10 +367,12 @@ class EasyTest(object):
                 print('Failure: ', sf)
         return res
 
-    def _test_graphics(self, reffiles):
+    @classmethod
+    def _test_graphics(cls, reffiles):
         assert False
 
-    def _test_filesize_gt_0(self, reffiles):
+    @classmethod
+    def _test_filesize_gt_0(cls, reffiles):
         """
         test that filesizes are all > 0 bytes
 
@@ -444,8 +449,9 @@ class EasyTest(object):
                 res = False
 
         return res
-
-    def hashfile(self, afile, hasher, blocksize=65536):
+    
+    @classmethod
+    def hashfile(cls, afile, hasher, blocksize=65536):
         """
         perform memory effiecient sha256 checksum on
         provided filename.
